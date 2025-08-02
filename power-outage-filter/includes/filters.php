@@ -2,25 +2,25 @@
 defined('ABSPATH') || exit;
 
 
-add_filter('reyhoon_get_products_args', 'poa_filter_available_products', 10, 1);
+add_action('woocommerce_product_query', 'poa_filter_available_products');
 
-function poa_filter_available_products($args)
+function poa_filter_available_products($q)
 {
     if (get_option('poa_mode_active') == '1') {
-        // Make sure tax_query exists as an array
-        if (!isset($args['tax_query']) || !is_array($args['tax_query'])) {
-            $args['tax_query'] = [];
+        $tax_query = $q->get('tax_query');
+        if (!is_array($tax_query)) {
+            $tax_query = [];
         }
 
-        $args['tax_query'][] = array(
+        $tax_query[] = [
             'taxonomy' => 'power_outage_availability',
-            'field' => 'slug',
-            'terms' => 'yes',
+            'field'    => 'slug',
+            'terms'    => 'yes',
             'operator' => 'IN',
-        );
-    }
+        ];
 
-    return $args;
+        $q->set('tax_query', $tax_query);
+    }
 }
 
 // Show product page with notice instead of blocking it
@@ -36,7 +36,7 @@ function poa_modify_single_product_display()
                         این محصول در زمان قطعی برق قابل ارائه نمی‌باشد.
                       </div>';
             }, 5);
-            
+
         }
     }
 }

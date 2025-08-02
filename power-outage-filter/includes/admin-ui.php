@@ -65,9 +65,7 @@ function poa_toggle_meta_callback($post) {
 }
 
 
-add_action('save_post_product', function ($post_id) {
-    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
-
+add_action('woocommerce_process_product_meta', function ($post_id) {
     if (isset($_POST['poa_toggle'])) {
         wp_set_object_terms($post_id, 'yes', 'power_outage_availability');
     } else {
@@ -141,4 +139,3 @@ function poa_remove_taxonomy_column_content($column, $post_id) {
         return;
     }
 }
-
