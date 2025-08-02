@@ -65,20 +65,34 @@ function poa_toggle_meta_callback($post) {
 }
 
 
-add_action('woocommerce_process_product_meta', function ($post_id) {
+// Reusable function to handle saving the power outage state
+function poa_save_power_outage_state($product_or_post_id) {
+    // The nonce and capability checks are handled by the hooks that call this function.
+    // For quick edit, the product object is passed, so we get the ID. For main save, post_id is passed.
+    $post_id = is_object($product_or_post_id) ? $product_or_post_id->get_id() : $product_or_post_id;
+
+    // `poa_toggle` is the name of our checkbox in both the main edit and quick edit forms.
+    // We check if it was part of the submitted form data. If not, we assume it was unchecked.
     if (isset($_POST['poa_toggle'])) {
         wp_set_object_terms($post_id, 'yes', 'power_outage_availability');
     } else {
         wp_remove_object_terms($post_id, 'yes', 'power_outage_availability');
     }
-});
+}
 
+// Hook for the main product edit page
+add_action('woocommerce_process_product_meta', 'poa_save_power_outage_state', 10, 1);
+
+// Hook for the quick edit save action
+add_action('woocommerce_product_quick_edit_save', 'poa_save_power_outage_state', 10, 1);
 
 
 // Add checkbox to quick edit
 add_action('quick_edit_custom_box', 'poa_quick_edit_custom_box', 10, 2);
 function poa_quick_edit_custom_box($column, $post_type) {
     if ($column !== 'name') return;
+    // Add a nonce field to ensure we can check for our save action
+    wp_nonce_field('poa_quick_edit_save', 'poa_quick_edit_nonce');
     ?>
     <fieldset class="inline-edit-col-right">
         <div class="inline-edit-col">

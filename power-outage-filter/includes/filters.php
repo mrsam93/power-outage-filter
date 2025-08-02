@@ -12,12 +12,16 @@ function poa_filter_available_products($q)
             $tax_query = [];
         }
 
+        // Add our specific query
         $tax_query[] = [
             'taxonomy' => 'power_outage_availability',
             'field'    => 'slug',
             'terms'    => 'yes',
             'operator' => 'IN',
         ];
+
+        // Explicitly set the relation to AND to avoid conflicts
+        $tax_query['relation'] = 'AND';
 
         $q->set('tax_query', $tax_query);
     }
