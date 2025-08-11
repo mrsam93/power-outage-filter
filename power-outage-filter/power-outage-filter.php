@@ -1,11 +1,14 @@
 <?php
-/*
-Plugin Name: فیلتر محصولات در زمان قطعی برق
-Description: فقط محصولات انتخاب‌شده را در زمان قطعی برق نمایش دهید.
-Version: 1.0
-Author: Erfan Hosseinpour
-*/
-
+/**
+ * Plugin Name: فیلتر محصولات در زمان قطعی برق
+ * Plugin URI:  https://saranhosting.com
+ * Description: فقط محصولات انتخاب‌شده را در زمان قطعی برق نمایش می دهد.
+ * Version:     1.1.0
+ * Author:      SaranHosting (Saman Ghadri)
+ * Author URI:  https://saranhosting.com
+ * License:     GPL-2.0+
+ * Text Domain: power-outage-filter
+ */
 
 defined('ABSPATH') || exit;
 
@@ -27,3 +30,4 @@ require_once plugin_dir_path(__FILE__) . 'includes/taxonomy.php';
 require_once plugin_dir_path(__FILE__) . 'includes/filters.php';
 require_once plugin_dir_path(__FILE__) . 'includes/admin-ui.php';
 require_once plugin_dir_path(__FILE__) . 'includes/settings.php';
+
